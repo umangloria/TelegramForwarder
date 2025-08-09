@@ -234,8 +234,8 @@ async def get_media_settings_text():
 
 async def get_ai_settings_text(rule):
     """生成AI设置页面的文本"""
-    ai_prompt = rule.ai_prompt or os.getenv('DEFAULT_AI_PROMPT', '未设置')
-    summary_prompt = rule.summary_prompt or os.getenv('DEFAULT_SUMMARY_PROMPT', '未设置')
+    ai_prompt = rule.ai_prompt or os.getenv('DEFAULT_AI_PROMPT', 'Not set')
+    summary_prompt = rule.summary_prompt or os.getenv('DEFAULT_SUMMARY_PROMPT', 'Not set')
 
     return AI_SETTINGS_TEXT.format(
         ai_prompt=ai_prompt,
@@ -339,7 +339,7 @@ async def check_and_clean_chats(session, rule=None):
                 if chat:
                     # 获取telegram_chat_id以便日志记录
                     telegram_chat_id = chat.telegram_chat_id
-                    name = chat.name or "未命名聊天"
+                    name = chat.name or "Unnamed chat"
                     
                     # 清理所有引用此聊天作为current_add_id的记录
                     chats_using_this = session.query(Chat).filter(

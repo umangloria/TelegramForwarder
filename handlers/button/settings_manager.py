@@ -10,39 +10,39 @@ AI_MODELS = load_ai_models()
 # 规则配置字段定义
 RULE_SETTINGS = {
     'enable_rule': {
-        'display_name': '是否启用规则',
+        'display_name': 'Enable rule',
         'values': {
-            True: '是',
-            False: '否'
+            True: 'Yes',
+            False: 'No'
         },
         'toggle_action': 'toggle_enable_rule',
         'toggle_func': lambda current: not current
     },
     'add_mode': {
-        'display_name': '当前关键字添加模式',
+        'display_name': 'Current keyword add mode',
         'values': {
-            AddMode.WHITELIST: '白名单',
-            AddMode.BLACKLIST: '黑名单'
+            AddMode.WHITELIST: 'Whitelist',
+            AddMode.BLACKLIST: 'Blacklist'
         },
         'toggle_action': 'toggle_add_mode',
         'toggle_func': lambda current: AddMode.BLACKLIST if current == AddMode.WHITELIST else AddMode.WHITELIST
     },
     'is_filter_user_info': {
-        'display_name': '过滤关键字时是否附带发送者名称和ID',
+        'display_name': 'Include sender name and ID when filtering',
         'values': {
-            True: '是',
-            False: '否'
+            True: 'Yes',
+            False: 'No'
         },
         'toggle_action': 'toggle_filter_user_info',
         'toggle_func': lambda current: not current
     },
     'forward_mode': {
-        'display_name': '转发模式',
+        'display_name': 'Filter mode',
         'values': {
-            ForwardMode.BLACKLIST: '仅黑名单',
-            ForwardMode.WHITELIST: '仅白名单',
-            ForwardMode.BLACKLIST_THEN_WHITELIST: '先黑名单后白名单', 
-            ForwardMode.WHITELIST_THEN_BLACKLIST: '先白名单后黑名单'
+            ForwardMode.BLACKLIST: 'Blacklist only',
+            ForwardMode.WHITELIST: 'Whitelist only',
+            ForwardMode.BLACKLIST_THEN_WHITELIST: 'Blacklist then whitelist', 
+            ForwardMode.WHITELIST_THEN_BLACKLIST: 'Whitelist then blacklist'
         },
         'toggle_action': 'toggle_forward_mode',
         'toggle_func': lambda current: {
@@ -53,25 +53,25 @@ RULE_SETTINGS = {
         }[current]
     },
     'use_bot': {
-        'display_name': '转发方式',
+        'display_name': 'Send mode',
         'values': {
-            True: '使用机器人',
-            False: '使用用户账号'
+            True: 'Bot',
+            False: 'User account'
         },
         'toggle_action': 'toggle_bot',
         'toggle_func': lambda current: not current
     },
     'is_replace': {
-        'display_name': '替换模式',
+        'display_name': 'Replace mode',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_replace',
         'toggle_func': lambda current: not current
     },
     'message_mode': {
-        'display_name': '消息模式',
+        'display_name': 'Message format',
         'values': {
             MessageMode.MARKDOWN: 'Markdown',
             MessageMode.HTML: 'HTML'
@@ -80,11 +80,11 @@ RULE_SETTINGS = {
         'toggle_func': lambda current: MessageMode.HTML if current == MessageMode.MARKDOWN else MessageMode.MARKDOWN
     },
     'is_preview': {
-        'display_name': '预览模式',
+        'display_name': 'Preview mode',
         'values': {
-            PreviewMode.ON: '开启',
-            PreviewMode.OFF: '关闭',
-            PreviewMode.FOLLOW: '跟随原消息'
+            PreviewMode.ON: 'On',
+            PreviewMode.OFF: 'Off',
+            PreviewMode.FOLLOW: 'Follow original'
         },
         'toggle_action': 'toggle_preview',
         'toggle_func': lambda current: {
@@ -94,56 +94,56 @@ RULE_SETTINGS = {
         }[current]
     },
     'is_original_link': {
-        'display_name': '原始链接',
+        'display_name': 'Original link',
         'values': {
-            True: '附带',
-            False: '不附带'
+            True: 'Include',
+            False: 'Exclude'
         },
         'toggle_action': 'toggle_original_link',
         'toggle_func': lambda current: not current
     },
     'is_delete_original': {
-        'display_name': '删除原始消息',
+        'display_name': 'Delete original message',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_delete_original',
         'toggle_func': lambda current: not current
     },
     'is_ufb': {
-        'display_name': 'UFB同步',
+        'display_name': 'UFB sync',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_ufb',
         'toggle_func': lambda current: not current
     },
     'is_original_sender': {
-        'display_name': '原始发送者',
+        'display_name': 'Original sender',
         'values': {
-            True: '显示',
-            False: '隐藏'
+            True: 'Show',
+            False: 'Hide'
         },
         'toggle_action': 'toggle_original_sender',
         'toggle_func': lambda current: not current
     },
     'is_original_time': {
-        'display_name': '发送时间',
+        'display_name': 'Send time',
         'values': {
-            True: '显示',
-            False: '隐藏'
+            True: 'Show',
+            False: 'Hide'
         },
         'toggle_action': 'toggle_original_time',
         'toggle_func': lambda current: not current
     },
     # 添加延迟过滤器设置
     'enable_delay': {
-        'display_name': '延迟处理',
+        'display_name': 'Delay processing',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_enable_delay',
         'toggle_func': lambda current: not current
@@ -157,42 +157,42 @@ RULE_SETTINGS = {
         'toggle_func': None
     },
     'handle_mode': {
-        'display_name': '处理模式',
+        'display_name': 'Handle mode',
         'values': {
-            HandleMode.FORWARD: '转发模式',
-            HandleMode.EDIT: '编辑模式'
+            HandleMode.FORWARD: 'Forward mode',
+            HandleMode.EDIT: 'Edit mode'
         },
         'toggle_action': 'toggle_handle_mode',
         'toggle_func': lambda current: HandleMode.EDIT if current == HandleMode.FORWARD else HandleMode.FORWARD
     },
     'enable_comment_button': {
-        'display_name': '查看评论区',
+        'display_name': 'Show comments button',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_enable_comment_button',
         'toggle_func': lambda current: not current
     },
     'only_rss': {
-        'display_name': '只转发到RSS',
+        'display_name': 'Only forward to RSS',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_only_rss',
         'toggle_func': lambda current: not current
     },
     'close_settings': {
-        'display_name': '关闭',
+        'display_name': 'Close',
         'toggle_action': 'close_settings',
         'toggle_func': None
     },
     'enable_sync': {
-        'display_name': '启用同步',
+        'display_name': 'Enable sync',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_enable_sync',
         'toggle_func': lambda current: not current
@@ -203,58 +203,58 @@ RULE_SETTINGS = {
 # 添加 AI 设置
 AI_SETTINGS = {
     'is_ai': {
-        'display_name': 'AI处理',
+        'display_name': 'AI processing',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_ai',
         'toggle_func': lambda current: not current
     },
     'ai_model': {
-        'display_name': 'AI模型',
+        'display_name': 'AI model',
         'values': {
-            None: '默认',
-            '': '默认',
+            None: 'Default',
+            '': 'Default',
             **{model: model for model in AI_MODELS}
         },
         'toggle_action': 'change_model',
         'toggle_func': None
     },
     'ai_prompt': {
-        'display_name': '设置AI处理提示词',
+        'display_name': 'Set AI processing prompt',
         'toggle_action': 'set_ai_prompt',
         'toggle_func': None
     },
     'enable_ai_upload_image': {
-        'display_name': '上传图片',
+        'display_name': 'Upload image',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_ai_upload_image',
         'toggle_func': lambda current: not current
     },
     'is_keyword_after_ai': {
-        'display_name': 'AI处理后再次执行关键字过滤',
+        'display_name': 'Filter keywords again after AI',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_keyword_after_ai',
         'toggle_func': lambda current: not current
     },
     'is_summary': {
-        'display_name': 'AI总结',
+        'display_name': 'AI summary',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_summary',
         'toggle_func': lambda current: not current
     },
     'summary_time': {
-        'display_name': '总结时间',
+        'display_name': 'Summary time',
         'values': {
             None: '00:00',
             '': '00:00'
@@ -263,21 +263,21 @@ AI_SETTINGS = {
         'toggle_func': None
     },
     'summary_prompt': {
-        'display_name': '设置AI总结提示词',
+        'display_name': 'Set AI summary prompt',
         'toggle_action': 'set_summary_prompt',
         'toggle_func': None
     },
     'is_top_summary': {
-        'display_name': '顶置总结消息',
+        'display_name': 'Pin summary message',
         'values': {
-            True: '是',
-            False: '否'
+            True: 'Yes',
+            False: 'No'
         },
         'toggle_action': 'toggle_top_summary',
         'toggle_func': lambda current: not current
     },
     'summary_now': {
-        'display_name': '立即执行总结',
+        'display_name': 'Run summary now',
         'toggle_action': 'summary_now',
         'toggle_func': None
     }
@@ -286,30 +286,30 @@ AI_SETTINGS = {
 
 MEDIA_SETTINGS = {
     'enable_media_type_filter': {
-        'display_name': '媒体类型过滤',
+        'display_name': 'Media type filter',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_enable_media_type_filter',
         'toggle_func': lambda current: not current
     },
     'selected_media_types': {
-        'display_name': '选择的媒体类型',
+        'display_name': 'Selected media types',
         'toggle_action': 'set_media_types',
         'toggle_func': None
     },
     'enable_media_size_filter': {
-        'display_name': '媒体大小过滤',
+        'display_name': 'Media size filter',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_enable_media_size_filter',
         'toggle_func': lambda current: not current
     },
     'max_media_size': {
-        'display_name': '媒体大小限制',
+        'display_name': 'Media size limit',
         'values': {
             None: '5MB',
             '': '5MB'
@@ -318,43 +318,43 @@ MEDIA_SETTINGS = {
         'toggle_func': None
     },
     'is_send_over_media_size_message': {
-        'display_name': '媒体大小超限时发送提醒',
+        'display_name': 'Send notice when media exceeds limit',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_send_over_media_size_message',
         'toggle_func': lambda current: not current
     },
     'enable_extension_filter': {
-        'display_name': '媒体扩展名过滤',
+        'display_name': 'Media extension filter',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_enable_media_extension_filter',
         'toggle_func': lambda current: not current
     },
     'extension_filter_mode': {
-        'display_name': '媒体扩展名过滤模式',
+        'display_name': 'Media extension filter mode',
         'values': {
-            AddMode.BLACKLIST: '黑名单',
-            AddMode.WHITELIST: '白名单'
+            AddMode.BLACKLIST: 'Blacklist',
+            AddMode.WHITELIST: 'Whitelist'
         },
         'toggle_action': 'toggle_media_extension_filter_mode',
         'toggle_func': lambda current: AddMode.WHITELIST if current == AddMode.BLACKLIST else AddMode.BLACKLIST
     },
     'media_extensions': {
-        'display_name': '设置媒体扩展名',
+        'display_name': 'Set media extensions',
         'toggle_action': 'set_media_extensions',
         'toggle_func': None,
         'values': {}
     },
     'media_allow_text': {
-        'display_name': '放行文本',
+        'display_name': 'Allow text',
         'values': {
-            True: '开启',
-            False: '关闭'
+            True: 'On',
+            False: 'Off'
         },
         'toggle_action': 'toggle_media_allow_text',
         'toggle_func': lambda current: not current
@@ -364,32 +364,32 @@ MEDIA_SETTINGS = {
 
 OTHER_SETTINGS = {
     'copy_rule': {
-        'display_name': '复制规则',
+        'display_name': 'Copy rule',
         'toggle_action': 'copy_rule',
         'toggle_func': None
     },
     'copy_keyword': {
-        'display_name': '复制关键字',
+        'display_name': 'Copy keywords',
         'toggle_action': 'copy_keyword',
         'toggle_func': None
     },
     'copy_replace': {
-        'display_name': '复制替换',
+        'display_name': 'Copy replace rules',
         'toggle_action': 'copy_replace',
         'toggle_func': None
     },
     'clear_keyword': {
-        'display_name': '清空所有关键字',
+        'display_name': 'Clear all keywords',
         'toggle_action': 'clear_keyword',
         'toggle_func': None
     },
     'clear_replace': {
-        'display_name': '清空所有替换规则',
+        'display_name': 'Clear all replace rules',
         'toggle_action': 'clear_replace',
         'toggle_func': None
     },
     'delete_rule': {
-        'display_name': '删除规则',
+        'display_name': 'Delete rule',
         'toggle_action': 'delete_rule',
         'toggle_func': None
     },
@@ -399,27 +399,27 @@ OTHER_SETTINGS = {
         'toggle_func': None
     },
     'set_userinfo_template': {
-        'display_name': '设置用户信息模板',
+        'display_name': 'Set user info template',
         'toggle_action': 'set_userinfo_template',
         'toggle_func': None
     },
     'set_time_template': {
-        'display_name': '设置时间模板',
+        'display_name': 'Set time template',
         'toggle_action': 'set_time_template',
         'toggle_func': None
     },
     'set_original_link_template': {
-        'display_name': '设置原始链接模板',
+        'display_name': 'Set original link template',
         'toggle_action': 'set_original_link_template',
         'toggle_func': None
     },
     'reverse_blacklist': {
-        'display_name': '反转黑名单',
+        'display_name': 'Reverse blacklist',
         'toggle_action': 'toggle_reverse_blacklist',
         'toggle_func': None
     },
     'reverse_whitelist': {
-        'display_name': '反转白名单',
+        'display_name': 'Reverse whitelist',
         'toggle_action': 'toggle_reverse_whitelist',
         'toggle_func': None
     }
@@ -427,17 +427,17 @@ OTHER_SETTINGS = {
 
 PUSH_SETTINGS = {
     'enable_push_channel': {
-        'display_name': '启用推送',
+        'display_name': 'Enable push',
         'toggle_action': 'toggle_enable_push',
         'toggle_func': None
     },
     'add_push_channel': {
-        'display_name': '➕ 添加推送配置',
+        'display_name': '➕ Add push config',
         'toggle_action': 'add_push_channel',
         'toggle_func': None
     },
     'enable_only_push': {
-        'display_name': '只转发到推送配置',
+        'display_name': 'Only forward to push config',
         'toggle_action': 'toggle_enable_only_push',
         'toggle_func': None
     }
@@ -446,8 +446,8 @@ PUSH_SETTINGS = {
 async def create_settings_text(rule):
     """创建设置信息文本"""
     text = (
-        "📋 管理转发规则\n\n"
-        f"规则ID: `{rule.id}`\n" 
+        "📋 Manage forward rule\n\n"
+        f"Rule ID: `{rule.id}`\n" 
         f"{rule.source_chat.name} --> {rule.target_chat.name}"
     )
     return text
@@ -467,14 +467,14 @@ async def create_buttons(rule):
         is_current = current_add_id == source_chat.telegram_chat_id
         buttons.append([
             Button.inline(
-                f"{'✅ ' if is_current else ''}应用当前规则",
+                f"{'✅ ' if is_current else ''}Apply current rule",
                 f"toggle_current:{rule.id}"
             )
         ])
 
         buttons.append([
             Button.inline(
-                f"是否启用规则: {RULE_SETTINGS['enable_rule']['values'][rule.enable_rule]}",
+                f"Enable rule: {RULE_SETTINGS['enable_rule']['values'][rule.enable_rule]}",
                 f"toggle_enable_rule:{rule.id}"
             )
         ])
@@ -482,7 +482,7 @@ async def create_buttons(rule):
         # 当前关键字添加模式
         buttons.append([
             Button.inline(
-                f"当前关键字添加模式: {RULE_SETTINGS['add_mode']['values'][rule.add_mode]}",
+                f"Keyword add mode: {RULE_SETTINGS['add_mode']['values'][rule.add_mode]}",
                 f"toggle_add_mode:{rule.id}"
             )
         ])
@@ -490,7 +490,7 @@ async def create_buttons(rule):
         # 是否过滤用户信息
         buttons.append([
             Button.inline(
-                f"过滤关键字时是否附带发送者名称和ID: {RULE_SETTINGS['is_filter_user_info']['values'][rule.is_filter_user_info]}",
+                f"Include sender info when filtering: {RULE_SETTINGS['is_filter_user_info']['values'][rule.is_filter_user_info]}",
                 f"toggle_filter_user_info:{rule.id}"
             )
         ])
@@ -499,7 +499,7 @@ async def create_buttons(rule):
             # 处理模式
             buttons.append([
                 Button.inline(
-                    f"⚙️ 处理模式: {RULE_SETTINGS['handle_mode']['values'][rule.handle_mode]}",
+                    f"⚙️ Handle mode: {RULE_SETTINGS['handle_mode']['values'][rule.handle_mode]}",
                     f"toggle_handle_mode:{rule.id}"
                 )
             ])
@@ -507,11 +507,11 @@ async def create_buttons(rule):
             # 处理模式
             buttons.append([
                 Button.inline(
-                    f"⚙️ 处理模式: {RULE_SETTINGS['handle_mode']['values'][rule.handle_mode]}",
+                    f"⚙️ Handle mode: {RULE_SETTINGS['handle_mode']['values'][rule.handle_mode]}",
                     f"toggle_handle_mode:{rule.id}"
                 ),
                 Button.inline(
-                    f"⚠️ 只转发到RSS: {RULE_SETTINGS['only_rss']['values'][rule.only_rss]}",
+                    f"⚠️ Only forward to RSS: {RULE_SETTINGS['only_rss']['values'][rule.only_rss]}",
                     f"toggle_only_rss:{rule.id}"
                 )
             ])
@@ -519,11 +519,11 @@ async def create_buttons(rule):
 
         buttons.append([
             Button.inline(
-                f"📥 过滤模式: {RULE_SETTINGS['forward_mode']['values'][rule.forward_mode]}",
+                f"📥 Filter mode: {RULE_SETTINGS['forward_mode']['values'][rule.forward_mode]}",
                 f"toggle_forward_mode:{rule.id}"
             ),
             Button.inline(
-                f"🤖 转发方式: {RULE_SETTINGS['use_bot']['values'][rule.use_bot]}",
+                f"🤖 Send as: {RULE_SETTINGS['use_bot']['values'][rule.use_bot]}",
                 f"toggle_bot:{rule.id}"
             )
         ])
@@ -532,44 +532,44 @@ async def create_buttons(rule):
         if rule.use_bot:  # 只在使用机器人时显示这些设置
             buttons.append([
                 Button.inline(
-                    f"🔄 替换模式: {RULE_SETTINGS['is_replace']['values'][rule.is_replace]}",
+                    f"🔄 Replace mode: {RULE_SETTINGS['is_replace']['values'][rule.is_replace]}",
                     f"toggle_replace:{rule.id}"
                 ),
                 Button.inline(
-                    f"📝 消息格式: {RULE_SETTINGS['message_mode']['values'][rule.message_mode]}",
+                    f"📝 Message format: {RULE_SETTINGS['message_mode']['values'][rule.message_mode]}",
                     f"toggle_message_mode:{rule.id}"
                 )
             ])
 
             buttons.append([
                 Button.inline(
-                    f"👁 预览模式: {RULE_SETTINGS['is_preview']['values'][rule.is_preview]}",
+                    f"👁 Preview: {RULE_SETTINGS['is_preview']['values'][rule.is_preview]}",
                     f"toggle_preview:{rule.id}"
                 ),
                 Button.inline(
-                    f"🔗 原始链接: {RULE_SETTINGS['is_original_link']['values'][rule.is_original_link]}",
+                    f"🔗 Original link: {RULE_SETTINGS['is_original_link']['values'][rule.is_original_link]}",
                     f"toggle_original_link:{rule.id}"
                 )
             ])
 
             buttons.append([
                 Button.inline(
-                    f"👤 原始发送者: {RULE_SETTINGS['is_original_sender']['values'][rule.is_original_sender]}",
+                    f"👤 Original sender: {RULE_SETTINGS['is_original_sender']['values'][rule.is_original_sender]}",
                     f"toggle_original_sender:{rule.id}"
                 ),
                 Button.inline(
-                    f"⏰ 发送时间: {RULE_SETTINGS['is_original_time']['values'][rule.is_original_time]}",
+                    f"⏰ Send time: {RULE_SETTINGS['is_original_time']['values'][rule.is_original_time]}",
                     f"toggle_original_time:{rule.id}"
                 )
             ])
 
             buttons.append([
                 Button.inline(
-                    f"🗑 删除原消息: {RULE_SETTINGS['is_delete_original']['values'][rule.is_delete_original]}",
+                    f"🗑 Delete original: {RULE_SETTINGS['is_delete_original']['values'][rule.is_delete_original]}",
                     f"toggle_delete_original:{rule.id}"
                 ),
                 Button.inline(
-                    f"💬 评论区按钮: {RULE_SETTINGS['enable_comment_button']['values'][rule.enable_comment_button]}",
+                    f"💬 Comment button: {RULE_SETTINGS['enable_comment_button']['values'][rule.enable_comment_button]}",
                     f"toggle_enable_comment_button:{rule.id}"
                 )
 
@@ -578,11 +578,11 @@ async def create_buttons(rule):
             # 添加延迟过滤器按钮
             buttons.append([
                 Button.inline(
-                    f"⏱️ 延迟处理: {RULE_SETTINGS['enable_delay']['values'][rule.enable_delay]}",
+                    f"⏱️ Delay processing: {RULE_SETTINGS['enable_delay']['values'][rule.enable_delay]}",
                     f"toggle_enable_delay:{rule.id}"
                 ),
                 Button.inline(
-                    f"⌛ 延迟秒数: {rule.delay_seconds or 5}秒",
+                    f"⌛ Delay seconds: {rule.delay_seconds or 5}s",
                     f"set_delay_time:{rule.id}"
                 )
             ])
@@ -592,11 +592,11 @@ async def create_buttons(rule):
             # 添加同步规则相关按钮
             buttons.append([
                 Button.inline(
-                    f"🔄 同步规则: {RULE_SETTINGS['enable_sync']['values'][rule.enable_sync]}",
+                    f"🔄 Sync rules: {RULE_SETTINGS['enable_sync']['values'][rule.enable_sync]}",
                     f"toggle_enable_sync:{rule.id}"
                 ),
                 Button.inline(
-                    f"📡 同步设置",
+                    f"📡 Sync settings",
                     f"set_sync_rule:{rule.id}"
                 )
             ])
@@ -604,7 +604,7 @@ async def create_buttons(rule):
             if UFB_ENABLED == 'true':
                 buttons.append([
                     Button.inline(
-                        f"☁️ UFB同步: {RULE_SETTINGS['is_ufb']['values'][rule.is_ufb]}",
+                        f"☁️ UFB sync: {RULE_SETTINGS['is_ufb']['values'][rule.is_ufb]}",
                         f"toggle_ufb:{rule.id}"
                     )
                 ])
@@ -614,15 +614,15 @@ async def create_buttons(rule):
 
             buttons.append([
                 Button.inline(
-                    "🤖 AI设置",
+                    "🤖 AI settings",
                     f"ai_settings:{rule.id}"
                 ),
                 Button.inline(
-                    "🎬 媒体设置",
+                    "🎬 Media settings",
                     f"media_settings:{rule.id}"
                 ),
                 Button.inline(
-                    "➕ 其他设置",
+                    "➕ Other settings",
                     f"other_settings:{rule.id}"
                 )
             ])
@@ -630,18 +630,18 @@ async def create_buttons(rule):
     
             buttons.append([
                 Button.inline(
-                    "🔔 推送设置",
+                    "🔔 Push settings",
                     f"push_settings:{rule.id}"
                 )
             ])
 
             buttons.append([
                 Button.inline(
-                    "👈 返回",
+                    "👈 Back",
                     "settings"
                 ),
                 Button.inline(
-                    "❌ 关闭",
+                    "❌ Close",
                     "close_settings"
                 )
             ])

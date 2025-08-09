@@ -29,7 +29,7 @@ async def callback_ai_settings(event, rule_id, session, message, data):
 
 
 async def callback_set_summary_time(event, rule_id, session, message, data):
-    await event.edit("请选择总结时间：", buttons=await create_summary_time_buttons(rule_id, page=0))
+    await event.edit("Please choose a summary time:", buttons=await create_summary_time_buttons(rule_id, page=0))
     return
 
 async def callback_set_summary_prompt(event, rule_id, session, message, data):
@@ -38,14 +38,14 @@ async def callback_set_summary_prompt(event, rule_id, session, message, data):
     
     rule = session.query(ForwardRule).get(rule_id)
     if not rule:
-        await event.answer('规则不存在')
+        await event.answer('The rule does not exist')
         return
 
     # 检查是否频道消息
     if isinstance(event.chat, types.Channel):
         # 检查是否是管理员
         if not await is_admin(event):
-            await event.answer('只有管理员可以修改设置')
+            await event.answer('Only admins can modify settings')
             return
         user_id = os.getenv('USER_ID')
     else:
@@ -65,13 +65,13 @@ async def callback_set_summary_prompt(event, rule_id, session, message, data):
         logger.exception(e)
 
     try:
-        current_prompt = rule.summary_prompt or os.getenv('DEFAULT_SUMMARY_PROMPT', '未设置')
+        current_prompt = rule.summary_prompt or os.getenv('DEFAULT_SUMMARY_PROMPT', 'Not set')
         await message.edit(
-            f"请发送新的AI总结提示词\n"
-            f"当前规则ID: `{rule_id}`\n"
-            f"当前AI总结提示词：\n\n`{current_prompt}`\n\n"
-            f"5分钟内未设置将自动取消",
-            buttons=[[Button.inline("取消", f"cancel_set_summary:{rule_id}")]]
+            f"Please send a new AI summary prompt\n"
+            f"Rule ID: `{rule_id}`\n"
+            f"Current summary prompt:\n\n`{current_prompt}`\n\n"
+            f"Will auto-cancel in 5 minutes",
+            buttons=[[Button.inline("Cancel", f"cancel_set_summary:{rule_id}")]]
         )
         logger.info("消息编辑成功")
     except Exception as e:
@@ -94,14 +94,14 @@ async def callback_set_ai_prompt(event, rule_id, session, message, data):
 
     rule = session.query(ForwardRule).get(rule_id)
     if not rule:
-        await event.answer('规则不存在')
+        await event.answer('The rule does not exist')
         return
 
     # 检查是否频道消息
     if isinstance(event.chat, types.Channel):
         # 检查是否是管理员
         if not await is_admin(event):
-            await event.answer('只有管理员可以修改设置')
+            await event.answer('Only admins can modify settings')
             return
         user_id = os.getenv('USER_ID')
     else:
@@ -121,13 +121,13 @@ async def callback_set_ai_prompt(event, rule_id, session, message, data):
         logger.exception(e)
 
     try:
-        current_prompt = rule.ai_prompt or os.getenv('DEFAULT_AI_PROMPT', '未设置')
+        current_prompt = rule.ai_prompt or os.getenv('DEFAULT_AI_PROMPT', 'Not set')
         await message.edit(
-            f"请发送新的AI提示词\n"
-            f"当前规则ID: `{rule_id}`\n"
-            f"当前AI提示词：\n\n`{current_prompt}`\n\n"
-            f"5分钟内未设置将自动取消",
-            buttons=[[Button.inline("取消", f"cancel_set_prompt:{rule_id}")]]
+            f"Please send a new AI prompt\n"
+            f"Rule ID: `{rule_id}`\n"
+            f"Current AI prompt:\n\n`{current_prompt}`\n\n"
+            f"Will auto-cancel in 5 minutes",
+            buttons=[[Button.inline("Cancel", f"cancel_set_prompt:{rule_id}")]]
         )
         logger.info("消息编辑成功")
     except Exception as e:
@@ -141,7 +141,7 @@ async def callback_set_ai_prompt(event, rule_id, session, message, data):
 async def callback_time_page(event, rule_id, session, message, data):
     _, rule_id, page = data.split(':')
     page = int(page)
-    await event.edit("请选择总结时间：", buttons=await create_summary_time_buttons(rule_id, page=page))
+    await event.edit("Please choose a summary time:", buttons=await create_summary_time_buttons(rule_id, page=page))
     return
 
 

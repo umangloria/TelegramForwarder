@@ -42,10 +42,16 @@ RSS_DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, RSS_DATA_PATH)
 
 # 默认AI模型
 DEFAULT_AI_MODEL = os.getenv('DEFAULT_AI_MODEL', 'gpt-4o')
-# 默认AI总结提示词
-DEFAULT_SUMMARY_PROMPT = os.getenv('DEFAULT_SUMMARY_PROMPT', '请总结以下频道/群组24小时内的消息。')
-# 默认AI提示词
-DEFAULT_AI_PROMPT = os.getenv('DEFAULT_AI_PROMPT', '请尊重原意，保持原有格式不变，用简体中文重写下面的内容：')
+# Default AI summary prompt (English UI, behavior unchanged)
+DEFAULT_SUMMARY_PROMPT = os.getenv(
+    'DEFAULT_SUMMARY_PROMPT',
+    'Please summarize the messages from the channel/group in the past 24 hours.'
+)
+# Default AI prompt (describe behavior in English, preserves original behavior intent)
+DEFAULT_AI_PROMPT = os.getenv(
+    'DEFAULT_AI_PROMPT',
+    'Please respect the original meaning and keep the original formatting unchanged. Rewrite the following content in Simplified Chinese:'
+)
 
 # 分页配置
 MODELS_PER_PAGE = int(os.getenv('AI_MODELS_PER_PAGE', 10))
@@ -76,25 +82,25 @@ USER_MESSAGE_DELETE_ENABLE = os.getenv("USER_MESSAGE_DELETE_ENABLE", "false")
 # 是否启用UFB
 UFB_ENABLED = os.getenv("UFB_ENABLED", "false")
 
-# 菜单标题
+# Menu titles / descriptive texts (English)
 AI_SETTINGS_TEXT = """
-当前AI提示词：
+Current AI prompt:
 
 `{ai_prompt}`
 
-当前总结提示词：
+Current summary prompt:
 
 `{summary_prompt}`
 """
 
-# 媒体设置文本
+# Media settings text
 MEDIA_SETTINGS_TEXT = """
-媒体设置：
+Media settings:
 """
 PUSH_SETTINGS_TEXT = """
-推送设置：
-请前往 https://github.com/caronc/apprise/wiki 查看添加推送配置格式说明
-如 `ntfy://ntfy.sh/你的主题名`
+Push settings:
+Please refer to the Apprise Wiki for configuration formats: https://github.com/caronc/apprise/wiki
+For example: `ntfy://ntfy.sh/your_topic_name`
 """
 
 

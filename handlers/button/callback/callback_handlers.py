@@ -26,12 +26,12 @@ async def callback_switch(event, rule_id, session, message, data):
     ).first()
 
     if not current_chat_db:
-        await event.answer('当前聊天不存在')
+        await event.answer('The current chat does not exist')
         return
 
     # 如果已经选中了这个聊天，就不做任何操作
     if current_chat_db.current_add_id == rule_id:
-        await event.answer('已经选中该聊天')
+        await event.answer('Already selected')
         return
 
     # 更新当前选中的源聊天
@@ -47,12 +47,12 @@ async def callback_switch(event, rule_id, session, message, data):
     for rule in rules:
         source_chat = rule.source_chat
         current = source_chat.telegram_chat_id == rule_id
-        button_text = f'{"✓ " if current else ""}来自: {source_chat.name}'
+        button_text = f'{"✓ " if current else ""}From: {source_chat.name}'
         callback_data = f"switch:{source_chat.telegram_chat_id}"
         buttons.append([Button.inline(button_text, callback_data)])
 
     try:
-        await message.edit('请选择要管理的转发规则:', buttons=buttons)
+        await message.edit('Please choose a rule to manage:', buttons=buttons)
     except Exception as e:
         if 'message was not modified' not in str(e).lower():
             raise  # 如果是其他错误就继续抛出
@@ -60,7 +60,7 @@ async def callback_switch(event, rule_id, session, message, data):
     source_chat = session.query(Chat).filter(
         Chat.telegram_chat_id == rule_id
     ).first()
-    await event.answer(f'已切换到: {source_chat.name if source_chat else "未知聊天"}')
+    await event.answer(f'Switched to: {source_chat.name if source_chat else "Unknown chat"}')
 
 async def callback_settings(event, rule_id, session, message, data):
     """处理显示设置的回调"""
@@ -71,7 +71,7 @@ async def callback_settings(event, rule_id, session, message, data):
     ).first()
 
     if not current_chat_db:
-        await event.answer('当前聊天不存在')
+        await event.answer('The current chat does not exist')
         return
 
     rules = session.query(ForwardRule).filter(
@@ -79,7 +79,7 @@ async def callback_settings(event, rule_id, session, message, data):
     ).all()
 
     if not rules:
-        await event.answer('当前聊天没有任何转发规则')
+        await event.answer('There are no forward rules in the current chat')
         return
 
     # 创建规则选择按钮
@@ -90,13 +90,13 @@ async def callback_settings(event, rule_id, session, message, data):
         callback_data = f"rule_settings:{rule.id}"
         buttons.append([Button.inline(button_text, callback_data)])
 
-    await message.edit('请选择要管理的转发规则:', buttons=buttons)
+    await message.edit('Please choose a rule to manage:', buttons=buttons)
 
 async def callback_delete(event, rule_id, session, message, data):
     """处理删除规则的回调"""
     rule = session.query(ForwardRule).get(rule_id)
     if not rule:
-        await event.answer('规则不存在')
+        await event.answer('The rule does not exist')
         return
 
     try:
@@ -141,14 +141,14 @@ async def callback_delete(event, rule_id, session, message, data):
         # 删除机器人的消息
         await message.delete()
         # 发送新的通知消息
-        await respond_and_delete(event,('✅ 已删除规则'))
-        await event.answer('已删除规则')
+         await respond_and_delete(event,('✅ Rule deleted'))
+         await event.answer('Rule deleted')
 
     except Exception as e:
         session.rollback()
         logger.error(f'删除规则时出错: {str(e)}')
         logger.exception(e)
-        await event.answer('删除规则失败，请检查日志')
+        await event.answer('Failed to delete rule, please check logs')
 
 async def callback_page(event, rule_id, session, message, data):
     """处理翻页的回调"""
@@ -166,7 +166,7 @@ async def callback_page(event, rule_id, session, message, data):
         ).first()
 
         if not current_chat_db or not current_chat_db.current_add_id:
-            await event.answer('请先选择一个源聊天')
+            await event.answer('Please select a source chat first')
             return
 
         source_chat = session.query(Chat).filter(
@@ -188,8 +188,8 @@ async def callback_page(event, rule_id, session, message, data):
                 event,
                 'keyword',
                 keywords,
-                lambda i, kw: f'{i}. {kw.keyword}{" (正则)" if kw.is_regex else ""}',
-                f'关键字列表\n规则: 来自 {source_chat.name}',
+                lambda i, kw: f'{i}. {kw.keyword}{" (regex)" if kw.is_regex else ""}',
+                f'Keyword list\nRule: From {source_chat.name}',
                 page
             )
 
@@ -203,8 +203,8 @@ async def callback_page(event, rule_id, session, message, data):
                 event,
                 'replace',
                 replace_rules,
-                lambda i, rr: f'{i}. 匹配: {rr.pattern} -> {"删除" if not rr.content else f"替换为: {rr.content}"}',
-                f'替换规则列表\n规则: 来自 {source_chat.name}',
+                lambda i, rr: f'{i}. Match: {rr.pattern} -> {"Delete" if not rr.content else f"Replace with: {rr.content}"}',
+                f'Replace rules\nRule: From {source_chat.name}',
                 page
             )
 
@@ -213,7 +213,7 @@ async def callback_page(event, rule_id, session, message, data):
 
     except Exception as e:
         logger.error(f'处理翻页时出错: {str(e)}')
-        await event.answer('处理翻页时出错，请检查日志')
+        await event.answer('Error handling pagination, please check logs')
 
 
 
@@ -221,7 +221,7 @@ async def callback_rule_settings(event, rule_id, session, message, data):
     """处理规则设置的回调"""
     rule = session.query(ForwardRule).get(rule_id)
     if not rule:
-        await event.answer('规则不存在')
+        await event.answer('The rule does not exist')
         return
 
     await message.edit(
@@ -241,7 +241,7 @@ async def callback_toggle_current(event, rule_id, session, message, data):
 
     # 检查是否已经是当前选中的规则
     if target_chat.current_add_id == source_chat.telegram_chat_id:
-        await event.answer('已经是当前选中的规则')
+        await event.answer('This rule is already selected')
         return
 
     # 更新当前选中的源聊天
@@ -258,12 +258,12 @@ async def callback_toggle_current(event, rule_id, session, message, data):
         if 'message was not modified' not in str(e).lower():
             raise
 
-    await event.answer(f'已切换到: {source_chat.name}')
+    await event.answer(f'Switched to: {source_chat.name}')
 
 
 
 async def callback_set_delay_time(event, rule_id, session, message, data):
-    await event.edit("请选择延迟时间：", buttons=await create_delay_time_buttons(rule_id, page=0))
+    await event.edit("Please choose a delay time:", buttons=await create_delay_time_buttons(rule_id, page=0))
     return
 
 
@@ -271,7 +271,7 @@ async def callback_set_delay_time(event, rule_id, session, message, data):
 async def callback_delay_time_page(event, rule_id, session, message, data):
     _, rule_id, page = data.split(':')
     page = int(page)
-    await event.edit("请选择延迟时间：", buttons=await create_delay_time_buttons(rule_id, page=page))
+    await event.edit("Please choose a delay time:", buttons=await create_delay_time_buttons(rule_id, page=page))
     return
 
             
@@ -291,7 +291,7 @@ async def callback_select_delay_time(event, rule_id, session, message, data):
                 # 更新时间
                 rule.delay_seconds = int(time)
                 session.commit()
-                logger.info(f"数据库更新成功: {old_time} -> {time}")
+            logger.info(f"Database updated: {old_time} -> {time}")
 
                 # 获取消息对象
                 message = await event.get_message()
@@ -300,10 +300,10 @@ async def callback_select_delay_time(event, rule_id, session, message, data):
                     await create_settings_text(rule),
                     buttons=await create_buttons(rule)
                 )
-                logger.info("界面更新完成")
+                logger.info("UI updated")
         except Exception as e:
-            logger.error(f"设置延迟时间时出错: {str(e)}")
-            logger.error(f"错误详情: {traceback.format_exc()}")
+            logger.error(f"Error setting delay time: {str(e)}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
         finally:
             session.close()
     return
@@ -313,13 +313,13 @@ async def callback_set_sync_rule(event, rule_id, session, message, data):
     try:
         rule = session.query(ForwardRule).get(int(rule_id))
         if not rule:
-            await event.answer('规则不存在')
+            await event.answer('The rule does not exist')
             return
         
-        await message.edit("请选择要同步到的规则：", buttons=await create_sync_rule_buttons(rule_id, page=0))
+        await message.edit("Please choose rules to sync to:", buttons=await create_sync_rule_buttons(rule_id, page=0))
     except Exception as e:
         logger.error(f"设置同步规则时出错: {str(e)}")
-        await event.answer('处理请求时出错，请检查日志')
+        await event.answer('Failed to process request, please check logs')
     return
 
 async def callback_toggle_rule_sync(event, rule_id_data, session, message, data):
@@ -328,7 +328,7 @@ async def callback_toggle_rule_sync(event, rule_id_data, session, message, data)
         # 解析回调数据 - 格式为 source_rule_id:target_rule_id:page
         parts = rule_id_data.split(":")
         if len(parts) != 3:
-            await event.answer('回调数据格式错误')
+            await event.answer('Invalid callback data format')
             return
         
         source_rule_id = int(parts[0])
@@ -347,23 +347,23 @@ async def callback_toggle_rule_sync(event, rule_id_data, session, message, data)
             # 如果已同步，则删除同步关系
             success, message_text = await db_ops.delete_rule_sync(session, source_rule_id, target_rule_id)
             if success:
-                await event.answer(f'已取消同步规则 {target_rule_id}')
+                await event.answer(f'Unlinked sync to rule {target_rule_id}')
             else:
-                await event.answer(f'取消同步失败: {message_text}')
+                await event.answer(f'Failed to unlink: {message_text}')
         else:
             # 如果未同步，则添加同步关系
             success, message_text = await db_ops.add_rule_sync(session, source_rule_id, target_rule_id)
             if success:
-                await event.answer(f'已设置同步到规则 {target_rule_id}')
+                await event.answer(f'Linked sync to rule {target_rule_id}')
             else:
-                await event.answer(f'设置同步失败: {message_text}')
+                await event.answer(f'Failed to link: {message_text}')
         
         # 更新按钮显示
-        await message.edit("请选择要同步到的规则：", buttons=await create_sync_rule_buttons(source_rule_id, page))
+        await message.edit("Please choose rules to sync to:", buttons=await create_sync_rule_buttons(source_rule_id, page))
         
     except Exception as e:
         logger.error(f"切换规则同步状态时出错: {str(e)}")
-        await event.answer('处理请求时出错，请检查日志')
+        await event.answer('Failed to process request, please check logs')
     return
 
 async def callback_sync_rule_page(event, rule_id_data, session, message, data):
@@ -372,7 +372,7 @@ async def callback_sync_rule_page(event, rule_id_data, session, message, data):
         # 解析回调数据 - 格式为 rule_id:page
         parts = rule_id_data.split(":")
         if len(parts) != 2:
-            await event.answer('回调数据格式错误')
+            await event.answer('Invalid callback data format')
             return
         
         rule_id = int(parts[0])
@@ -381,15 +381,15 @@ async def callback_sync_rule_page(event, rule_id_data, session, message, data):
         # 检查规则是否存在
         rule = session.query(ForwardRule).get(rule_id)
         if not rule:
-            await event.answer('规则不存在')
+            await event.answer('The rule does not exist')
             return
         
         # 更新按钮显示
-        await message.edit("请选择要同步到的规则：", buttons=await create_sync_rule_buttons(rule_id, page))
+        await message.edit("Please choose rules to sync to:", buttons=await create_sync_rule_buttons(rule_id, page))
         
     except Exception as e:
         logger.error(f"处理同步规则页面翻页时出错: {str(e)}")
-        await event.answer('处理请求时出错，请检查日志')
+        await event.answer('Failed to process request, please check logs')
     return
 
 
@@ -400,11 +400,11 @@ async def callback_close_settings(event, rule_id, session, message, data):
         await message.delete()
     except Exception as e:
         logger.error(f"删除消息时出错: {str(e)}")
-        await event.answer("关闭设置失败，请检查日志")
+        await event.answer("Failed to close settings, please check logs")
 
 async def callback_noop(event, rule_id, session, message, data):
     # 用于页码按钮，不做任何操作
-    await event.answer("当前页码")
+    await event.answer("Current page")
     return
 
 
@@ -413,7 +413,7 @@ async def callback_page_rule(event, page_str, session, message, data):
     try:
         page = int(page_str)
         if page < 1:
-            await event.answer('已经是第一页了')
+            await event.answer('Already first page')
             return
 
         per_page = 30
@@ -423,21 +423,21 @@ async def callback_page_rule(event, page_str, session, message, data):
         total_rules = session.query(ForwardRule).count()
         
         if total_rules == 0:
-            await event.answer('没有任何规则')
+            await event.answer('No rules')
             return
 
         # 计算总页数
         total_pages = (total_rules + per_page - 1) // per_page
 
         if page > total_pages:
-            await event.answer('已经是最后一页了')
+            await event.answer('Already last page')
             return
 
         # 获取当前页的规则
         rules = session.query(ForwardRule).order_by(ForwardRule.id).offset(offset).limit(per_page).all()
             
         # 构建规则列表消息
-        message_parts = [f'📋 转发规则列表 (第{page}/{total_pages}页)：\n']
+        message_parts = [f'📋 Forward rules (Page {page}/{total_pages}):\n']
         
         for rule in rules:
             source_chat = rule.source_chat
@@ -445,8 +445,8 @@ async def callback_page_rule(event, page_str, session, message, data):
             
             rule_desc = (
                 f'<b>ID: {rule.id}</b>\n'
-                f'<blockquote>来源: {source_chat.name} ({source_chat.telegram_chat_id})\n'
-                f'目标: {target_chat.name} ({target_chat.telegram_chat_id})\n'
+                f'<blockquote>From: {source_chat.name} ({source_chat.telegram_chat_id})\n'
+                f'To: {target_chat.name} ({target_chat.telegram_chat_id})\n'
                 '</blockquote>'
             )
             message_parts.append(rule_desc)
@@ -456,14 +456,14 @@ async def callback_page_rule(event, page_str, session, message, data):
         nav_row = []
 
         if page > 1:
-            nav_row.append(Button.inline('⬅️ 上一页', f'page_rule:{page-1}'))
+            nav_row.append(Button.inline('⬅️ Prev', f'page_rule:{page-1}'))
         else:
             nav_row.append(Button.inline('⬅️', 'noop'))
 
         nav_row.append(Button.inline(f'{page}/{total_pages}', 'noop'))
 
         if page < total_pages:
-            nav_row.append(Button.inline('下一页 ➡️', f'page_rule:{page+1}'))
+            nav_row.append(Button.inline('Next ➡️', f'page_rule:{page+1}'))
         else:
             nav_row.append(Button.inline('➡️', 'noop'))
 
@@ -474,7 +474,7 @@ async def callback_page_rule(event, page_str, session, message, data):
 
     except Exception as e:
         logger.error(f'处理规则列表分页时出错: {str(e)}')
-        await event.answer('处理分页请求时出错，请检查日志')
+        await event.answer('Error while paging, please check logs')
 
 async def update_rule_setting(event, rule_id, session, message, field_name, config, setting_type):
     """通用的规则设置更新函数
@@ -488,11 +488,11 @@ async def update_rule_setting(event, rule_id, session, message, field_name, conf
         config: 设置配置
         setting_type: 设置类型 ('rule', 'media', 'ai')
     """
-    logger.info(f'找到匹配的设置项: {field_name}')
+        logger.info(f'Found matched setting: {field_name}')
     rule = session.query(ForwardRule).get(int(rule_id))
     if not rule:
-        logger.warning(f'规则不存在: {rule_id}')
-        await event.answer('规则不存在')
+        logger.warning(f'Rule does not exist: {rule_id}')
+        await event.answer('The rule does not exist')
         return False
 
     current_value = getattr(rule, field_name)
@@ -502,23 +502,23 @@ async def update_rule_setting(event, rule_id, session, message, field_name, conf
     try:
         # 首先更新当前规则
         session.commit()
-        logger.info(f'更新规则 {rule.id} 的 {field_name} 从 {current_value} 到 {new_value}')
+        logger.info(f'Updated rule {rule.id} {field_name} from {current_value} to {new_value}')
 
         # 检查是否启用了同步功能，且不是"是否启用规则"字段和"启用同步"字段
         if rule.enable_sync and field_name != 'enable_rule' and field_name != 'enable_sync':
-            logger.info(f"规则 {rule.id} 启用了同步功能，正在同步设置更改到关联规则")
+            logger.info(f"Rule {rule.id} enabled sync, applying changes to linked rules")
             # 获取需要同步的规则列表
             sync_rules = session.query(RuleSync).filter(RuleSync.rule_id == rule.id).all()
             
             # 为每个同步规则应用相同的设置
             for sync_rule in sync_rules:
                 sync_rule_id = sync_rule.sync_rule_id
-                logger.info(f"正在同步设置 {field_name} 到规则 {sync_rule_id}")
+                logger.info(f"Syncing setting {field_name} to rule {sync_rule_id}")
                 
                 # 获取同步目标规则
                 target_rule = session.query(ForwardRule).get(sync_rule_id)
                 if not target_rule:
-                    logger.warning(f"同步目标规则 {sync_rule_id} 不存在，跳过")
+                    logger.warning(f"Sync target rule {sync_rule_id} not found, skipping")
                     continue
                 
                 # 更新同步目标规则的设置
@@ -530,14 +530,14 @@ async def update_rule_setting(event, rule_id, session, message, field_name, conf
                     setattr(target_rule, field_name, new_value)
                     session.flush()
                     
-                    logger.info(f"同步规则 {sync_rule_id} 的 {field_name} 从 {old_value} 到 {new_value}")
+                    logger.info(f"Synced rule {sync_rule_id} {field_name} from {old_value} to {new_value}")
                 except Exception as e:
                     logger.error(f"同步设置到规则 {sync_rule_id} 时出错: {str(e)}")
                     continue
             
             # 提交所有同步更改
             session.commit()
-            logger.info("所有同步更改已提交")
+            logger.info("All sync changes committed")
 
         # 根据设置类型更新UI
         if setting_type == 'rule':
@@ -546,26 +546,26 @@ async def update_rule_setting(event, rule_id, session, message, field_name, conf
                 buttons=await create_buttons(rule)
             )
         elif setting_type == 'media':
-            await event.edit("媒体设置：", buttons=await create_media_settings_buttons(rule))
+            await event.edit("Media settings:", buttons=await create_media_settings_buttons(rule))
         elif setting_type == 'ai':
             await message.edit(
                 await get_ai_settings_text(rule),
                 buttons=await create_ai_settings_buttons(rule)
             )
         elif setting_type == 'other':
-            await event.edit("其他设置：", buttons=await create_other_settings_buttons(rule))
+            await event.edit("Other settings:", buttons=await create_other_settings_buttons(rule))
         elif setting_type == 'push':
             await event.edit(PUSH_SETTINGS_TEXT, buttons=await create_push_settings_buttons(rule), link_preview=False)
         display_name = config.get('display_name', field_name)
         if field_name == 'use_bot':
-            await event.answer(f'已切换到{"机器人" if new_value else "用户账号"}模式')
+            await event.answer(f'Switched to {"Bot" if new_value else "User account"} mode')
         else:
-            await event.answer(f'已更新{display_name}')
+            await event.answer(f'Updated {display_name}')
         return True
     except Exception as e:
         session.rollback()
-        logger.error(f'更新规则设置时出错: {str(e)}')
-        await event.answer('更新设置失败，请检查日志')
+        logger.error(f'Error updating settings: {str(e)}')
+        await event.answer('Failed to update, please check logs')
         return False
 
 
@@ -573,13 +573,13 @@ async def handle_callback(event):
     """处理按钮回调"""
     try:
         data = event.data.decode()
-        logger.info(f'收到回调数据: {data}')
+        logger.info(f'Received callback data: {data}')
 
         # 解析回调数据
         parts = data.split(':')
         action = parts[0]
         rule_id = ':'.join(parts[1:]) if len(parts) > 1 else None
-        logger.info(f'解析回调数据: action={action}, rule_id={rule_id}')
+        logger.info(f'Parsed callback: action={action}, rule_id={rule_id}')
 
         # 获取消息对象
         message = await event.get_message()
@@ -593,7 +593,7 @@ async def handle_callback(event):
                 logger.info(f'找到对应的处理器: {handler}')
                 await handler(event, rule_id, session, message, data)
             else:
-                logger.info(f'未找到对应的处理器,尝试处理规则设置切换: {action}')
+                logger.info(f'No handler found, try toggle in settings: {action}')
                 
                 # 尝试在RULE_SETTINGS中查找
                 for field_name, config in RULE_SETTINGS.items():
@@ -619,9 +619,9 @@ async def handle_callback(event):
             session.close()
 
     except Exception as e:
-        logger.error(f'处理按钮回调时出错: {str(e)}')
-        logger.error(f'错误堆栈: {traceback.format_exc()}')
-        await event.answer('处理请求时出错，请检查日志')
+        logger.error(f'Error handling callback: {str(e)}')
+        logger.error(f'Traceback: {traceback.format_exc()}')
+        await event.answer('Failed to process request, please check logs')
 
 
 

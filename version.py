@@ -9,24 +9,24 @@ VERSION_INFO = {
 } 
 
 
-UPDATE_INFO = """<blockquote><b>✨ 更新日志 v1.7.2</b>
+UPDATE_INFO = """<blockquote><b>✨ Changelog v1.7.2</b>
 
-- 提高AI总结的健壮性 @iCross https://github.com/Heavrnl/TelegramForwarder/pull/47
+- Improve robustness of AI summary @iCross https://github.com/Heavrnl/TelegramForwarder/pull/47
 
 </blockquote>
 """
 
 
 WELCOME_TEXT = """
-<b>🎉 欢迎使用 TelegramForwarder !</b>
+<b>🎉 Welcome to TelegramForwarder!</b>
         
-如果您觉得这个项目对您有帮助，欢迎通过以下方式支持我:
+If this project is helpful, you can support me via:
 
-<blockquote>⭐ <b>给项目点个小小的 Star:</b> <a href='https://github.com/Heavrnl/TelegramForwarder'>TelegramForwarder</a>
-☕ <b>请我喝杯咖啡:</b> <a href='https://ko-fi.com/0heavrnl'>Ko-fi</a></blockquote>
+<blockquote>⭐ <b>Star the repo:</b> <a href='https://github.com/Heavrnl/TelegramForwarder'>TelegramForwarder</a>
+☕ <b>Buy me a coffee:</b> <a href='https://ko-fi.com/0heavrnl'>Ko-fi</a></blockquote>
 
-当前版本: v1.7.2
-更新日志: /changelog
+Current version: v1.7.2
+Changelog: /changelog
 
-感谢您的支持!
+Thank you for your support!
 """

@@ -1,0 +1,11 @@
+services:
+  telegram-forwarder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: unicornking95/telegramforwarder:local
+    # If you plan to use RSS locally, uncomment:
+    # ports:
+    #   - "9804:8000"
+    stdin_open: true
+    tty: true

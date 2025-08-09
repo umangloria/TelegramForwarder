@@ -41,7 +41,7 @@ async def handle_bind_command(event, client, parts):
             raise ValueError("参数不足")
     except ValueError:
         await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-        await reply_and_delete(event,'用法: /bind <源聊天链接或名称> [目标聊天链接或名称]\n例如:\n/bind https://t.me/channel_name\n/bind "频道 名称"\n/bind https://t.me/source_channel https://t.me/target_channel\n/bind "源频道名称" "目标频道名称"')
+        await reply_and_delete(event,'Usage: /bind <source link or name> [target link or name]\nExamples:\n/bind https://t.me/channel_name\n/bind "Channel Name"\n/bind https://t.me/source_channel https://t.me/target_channel\n/bind "Source Channel" "Target Channel"')
         return
 
     # 检查是否是链接
@@ -68,7 +68,7 @@ async def handle_bind_command(event, client, parts):
                         break
                 else:
                     await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-                    await reply_and_delete(event,'未找到匹配的源群组/频道，请确保名称正确且账号已加入该群组/频道')
+                    await reply_and_delete(event,'Source chat not found. Ensure the name is correct and your account has joined the chat/channel')
                     return
             
             # 获取目标聊天实体
@@ -85,7 +85,7 @@ async def handle_bind_command(event, client, parts):
                             break
                     else:
                         await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-                        await reply_and_delete(event,'未找到匹配的目标群组/频道，请确保名称正确且账号已加入该群组/频道')
+                        await reply_and_delete(event,'Target chat not found. Ensure the name is correct and your account has joined the chat/channel')
                         return
             else:
                 # 使用当前聊天作为目标
@@ -99,12 +99,12 @@ async def handle_bind_command(event, client, parts):
 
         except ValueError:
             await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-            await reply_and_delete(event,'无法获取聊天信息，请确保链接/名称正确且账号已加入该群组/频道')
+            await reply_and_delete(event,'Failed to get chat info. Ensure the link/name is correct and your account has joined the chat/channel')
             return
         except Exception as e:
             logger.error(f'获取聊天信息时出错: {str(e)}')
             await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-            await reply_and_delete(event,'获取聊天信息时出错，请检查日志')
+            await reply_and_delete(event,'Error while fetching chat info, please check logs')
             return
 
         # 保存到数据库
@@ -156,21 +156,21 @@ async def handle_bind_command(event, client, parts):
 
             await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
             await reply_and_delete(event,
-                f'已设置转发规则:\n'
-                f'源聊天: {source_chat_db.name} ({source_chat_db.telegram_chat_id})\n'
-                f'目标聊天: {target_chat_db.name} ({target_chat_db.telegram_chat_id})\n'
-                f'请使用 /add 或 /add_regex 添加关键字',
-                buttons=[Button.inline("⚙️ 打开设置", f"rule_settings:{rule.id}")]
+                f'Set forwarding rule:\n'
+                f'Source: {source_chat_db.name} ({source_chat_db.telegram_chat_id})\n'
+                f'Target: {target_chat_db.name} ({target_chat_db.telegram_chat_id})\n'
+                f'Use /add or /add_regex to add keywords',
+                buttons=[Button.inline("⚙️ Open settings", f"rule_settings:{rule.id}")]
             )
 
         except IntegrityError:
             session.rollback()
             await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
             await reply_and_delete(event,
-                f'已存在相同的转发规则:\n'
-                f'源聊天: {source_chat_db.name}\n'
-                f'目标聊天: {target_chat_db.name}\n'
-                f'如需修改请使用 /settings 命令'
+                f'Identical forwarding rule already exists:\n'
+                f'Source: {source_chat_db.name}\n'
+                f'Target: {target_chat_db.name}\n'
+                f'Use /settings to modify.'
             )
             return
         finally:
@@ -179,7 +179,7 @@ async def handle_bind_command(event, client, parts):
     except Exception as e:
         logger.error(f'设置转发规则时出错: {str(e)}\n{traceback.format_exc()}')
         await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-        await reply_and_delete(event,'设置转发规则时出错，请检查日志')
+        await reply_and_delete(event,'Error setting the forward rule, please check logs')
         return
 
 async def handle_settings_command(event, command, parts):
@@ -199,7 +199,7 @@ async def handle_settings_command(event, command, parts):
         try:
             rule = session.query(ForwardRule).get(rule_id)
             if not rule:
-                await reply_and_delete(event, f'找不到ID为 {rule_id} 的规则')
+                await reply_and_delete(event, f'Cannot find rule with ID {rule_id}')
                 return
                 
             # 与callback_rule_settings函数相同的处理方式
@@ -210,7 +210,7 @@ async def handle_settings_command(event, command, parts):
             
         except Exception as e:
             logger.error(f'打开规则设置时出错: {str(e)}')
-            await reply_and_delete(event, '打开规则设置时出错，请检查日志')
+            await reply_and_delete(event, 'Error opening rule settings, please check logs')
         finally:
             session.close()
         return
@@ -235,7 +235,7 @@ async def handle_settings_command(event, command, parts):
         if not current_chat_db:
             logger.info(f'在数据库中找不到聊天ID: {current_chat_id}')
             await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-            await reply_and_delete(event,'当前聊天没有任何转发规则')
+            await reply_and_delete(event,'There are no forwarding rules in the current chat')
             return
 
         # 添加日志
@@ -253,7 +253,7 @@ async def handle_settings_command(event, command, parts):
 
         if not rules:
             await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-            await reply_and_delete(event,'当前聊天没有任何转发规则')
+            await reply_and_delete(event,'There are no forwarding rules in the current chat')
             return
 
         # 创建规则选择按钮
@@ -269,12 +269,12 @@ async def handle_settings_command(event, command, parts):
         await async_delete_user_message(client, event.message.chat_id, event.message.id, 0)
 
         await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-        await reply_and_delete(event,'请选择要管理的转发规则:', buttons=buttons)
+        await reply_and_delete(event,'Please choose a rule to manage:', buttons=buttons)
 
     except Exception as e:
         logger.info(f'获取转发规则时出错: {str(e)}')
         await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-        await reply_and_delete(event,'获取转发规则时出错，请检查日志')
+        await reply_and_delete(event,'Error retrieving rules, please check logs')
     finally:
         session.close()
 
@@ -310,11 +310,11 @@ async def handle_switch_command(event):
             source_chat = rule.source_chat
             # 标记当前选中的规则
             current = current_chat_db.current_add_id == source_chat.telegram_chat_id
-            button_text = f'{"✓ " if current else ""}来自: {source_chat.name}'
+            button_text = f'{"✓ " if current else ""}From: {source_chat.name}'
             callback_data = f"switch:{source_chat.telegram_chat_id}"
             buttons.append([Button.inline(button_text, callback_data)])
         await async_delete_user_message(event.client, event.message.chat_id, event.message.id, 0)
-        await reply_and_delete(event,'请选择要管理的转发规则:', buttons=buttons)
+        await reply_and_delete(event,'Please choose a rule to manage:', buttons=buttons)
     finally:
         session.close()
 
