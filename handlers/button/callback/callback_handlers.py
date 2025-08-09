@@ -11,7 +11,8 @@ import logging
 import aiohttp
 from utils.constants import RSS_HOST, RSS_PORT
 from utils.auto_delete import respond_and_delete,reply_and_delete
-from utils.common import check_and_clean_chats
+from utils.common import check_and_clean_chats, get_db_ops
+import traceback
 from handlers.button.button_helpers import create_sync_rule_buttons,create_other_settings_buttons
 
 logger = logging.getLogger(__name__)
@@ -141,8 +142,8 @@ async def callback_delete(event, rule_id, session, message, data):
         # 删除机器人的消息
         await message.delete()
         # 发送新的通知消息
-         await respond_and_delete(event,('✅ Rule deleted'))
-         await event.answer('Rule deleted')
+        await respond_and_delete(event, ('✅ Rule deleted'))
+        await event.answer('Rule deleted')
 
     except Exception as e:
         session.rollback()
@@ -478,7 +479,7 @@ async def callback_page_rule(event, page_str, session, message, data):
 
 async def update_rule_setting(event, rule_id, session, message, field_name, config, setting_type):
     """通用的规则设置更新函数
-    
+
     Args:
         event: 回调事件
         rule_id: 规则ID
@@ -488,7 +489,7 @@ async def update_rule_setting(event, rule_id, session, message, field_name, conf
         config: 设置配置
         setting_type: 设置类型 ('rule', 'media', 'ai')
     """
-        logger.info(f'Found matched setting: {field_name}')
+    logger.info(f'Found matched setting: {field_name}')
     rule = session.query(ForwardRule).get(int(rule_id))
     if not rule:
         logger.warning(f'Rule does not exist: {rule_id}')
