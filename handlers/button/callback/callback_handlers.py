@@ -140,9 +140,8 @@ async def callback_delete(event, rule_id, session, message, data):
             logger.info(f"删除规则后清理了 {deleted_chats} 个未使用的聊天记录")
 
         # 删除机器人的消息
-        await message.delete()
-        # 发送新的通知消息
-        await respond_and_delete(event, ('✅ Rule deleted'))
+        await message.delete() # 发送新的通知消息
+        await respond_and_delete(event, '✅ Rule deleted')
         await event.answer('Rule deleted')
 
     except Exception as e:
