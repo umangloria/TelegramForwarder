@@ -291,7 +291,7 @@ async def callback_select_delay_time(event, rule_id, session, message, data):
                 # 更新时间
                 rule.delay_seconds = int(time)
                 session.commit()
-            logger.info(f"Database updated: {old_time} -> {time}")
+                logger.info(f"Database updated: {old_time} -> {time}")
 
                 # 获取消息对象
                 message = await event.get_message()
